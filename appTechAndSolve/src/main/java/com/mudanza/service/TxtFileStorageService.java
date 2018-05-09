@@ -1,5 +1,6 @@
 package com.mudanza.service;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -7,7 +8,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -18,51 +18,51 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.mudanza.configuration.StorageProperties;
+import com.mudanza.core.ProcessFile;
 import com.mudanza.exception.StorageException;
 import com.mudanza.exception.StorageFileNotFoundException;
+import com.mudanza.utils.Constants;
+import com.mudanza.utils.file.FileSystemImpl;
+import com.mudanza.utils.file.IFileSystem;
 
 @Service
-public class txtFileStorageService implements IStorageService {
+public class TxtFileStorageService implements IStorageService {
+	
 	private final Path rootLocation;
+	private final ProcessFile processFile;
 
 	@Autowired
-	public txtFileStorageService(StorageProperties properties) {
+	public TxtFileStorageService(StorageProperties properties, ProcessFile processFile) {
 		this.rootLocation = Paths.get(properties.getLocation());
+		this.processFile = processFile;
 	}
 
 	@Override
-	public void store(MultipartFile file) {
+	public File store(MultipartFile file) {
 		String filename = StringUtils.cleanPath(file.getOriginalFilename());
 		try {
 			if (!filename.endsWith(".txt")){
-				throw new StorageException("Solo se permiten archivos planos (.txt)");
+				throw new StorageException(Constants.FORMATFILE);
 			}
-			if (file.isEmpty()) {
-				throw new StorageException("El archivo esta vacío");
-			}
+			
 			if (filename.contains("..")) {
-				throw new StorageException(
-						"No se puede almacenar el archivo con una ruta relativa fuera del directorio actual.");
+				throw new StorageException(Constants.MALFORMEDPATH);
 			}
+			
+			if (file.isEmpty()) {
+				throw new StorageException(Constants.EMPTYFILE);
+			}
+			
 			try (InputStream inputStream = file.getInputStream()) {
 				Files.copy(inputStream, this.rootLocation.resolve(filename), StandardCopyOption.REPLACE_EXISTING);
 			}
 		} catch (IOException e) {
-			throw new StorageException("Error al almacenar el archivo: " + filename, e);
+			throw new StorageException(Constants.SAVEFILE + filename, e);
 		}
+		return new File(rootLocation.toString(), filename);
 	}
 
-	@Override
-	public Stream<Path> loadAll() {
-		try {
-			return Files.walk(this.rootLocation, 1).filter(path -> !path.equals(this.rootLocation))
-					.map(this.rootLocation::relativize);
-		} catch (IOException e) {
-			throw new StorageException("Error al leer los archivos almacenados", e);
-		}
-
-	}
-
+	
 	@Override
 	public Path load(String filename) {
 		return rootLocation.resolve(filename);
@@ -76,11 +76,11 @@ public class txtFileStorageService implements IStorageService {
 			if (resource.exists() || resource.isReadable()) {
 				return resource;
 			} else {
-				throw new StorageFileNotFoundException("No existe o no se puedo leer el archivo: " + filename);
+				throw new StorageFileNotFoundException(Constants.FILENOTFOUND + filename);
 
 			}
 		} catch (MalformedURLException e) {
-			throw new StorageFileNotFoundException("No se pudo acceder al archivo: " + filename, e);
+			throw new StorageFileNotFoundException(Constants.ACCESSFILE + filename, e);
 		}
 	}
 
@@ -91,10 +91,17 @@ public class txtFileStorageService implements IStorageService {
 
 	@Override
 	public void init() {
+		IFileSystem fileSystem = new FileSystemImpl();
+
 		try {
-			Files.createDirectories(rootLocation);
+			fileSystem.createDirectories(rootLocation);
 		} catch (IOException e) {
-			throw new StorageException("No se pudo crear el directorio para guardar los archivos", e);
+			throw new StorageException(Constants.CREATINGDIRECTORY, e);
 		}
+	}
+
+	@Override
+	public void processFile(File fileUpdated) {
+		processFile.generateResponse(fileUpdated);		
 	}
 }

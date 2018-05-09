@@ -4,7 +4,10 @@ package com.mudanza.response;
  * Clase generica para manejar una respuesta estandar en todas las peticiones
  * Rest
  * 
- * @author Paul Arenas
+ * @author Paul Andrés Arenas Cardona
+ * @version 1.0 
+ * 
+ * Fecha de creación 2018-05-07
  *
  */
 public class Response<T> {
