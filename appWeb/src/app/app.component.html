@@ -1,0 +1,19 @@
+<div id="content" class="col-lg-10 col-lg-offset-1">
+  <header id="header" class="col-lg-12" [style.background]='header_color'>
+    <h1>
+      {{title}}
+    </h1>
+  </header>
+  <nav id="nav" class="col-lg-12">
+    <ul>
+      <li><a id="homeNav" [routerLink]="['/home']" [routerLinkActive]="['activado']">Home</a></li>
+    </ul>
+  </nav>
+  <section id="main" class="col-lg-12">
+    <!-- Componente actual -->
+    <router-outlet></router-outlet>
+  </section>
+  <footer id="footer" class="col-lg-12">
+    <p>&copy;2018 - Paul Arenas</p>
+  </footer>
+</div>

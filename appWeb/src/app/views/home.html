@@ -1,0 +1,31 @@
+<div class="col-lg-10 col-lg-offset-1"
+>
+    <div class="jumbotron">
+        <h2>{{titulo}}</h2>
+
+        <input type="text" id="identification" pattern="[0-9]*" maxlength="10" #identification="ngModel" name="identification" [(ngModel)]="worker.identification" required placeholder="Ingresar identificación del participante">
+
+        <input type="file" id="file" #file="ngModel"  name="file" [(ngModel)]="worker.file" accept=".txt" class="form-control" required placeholder="Seleccioine un archivo"  (change)="fileChange($event)" [disabled]="!worker.identification">
+
+        <div *ngIf="workers">
+            <hr>
+            <h2>Listado de participantes procesados</h2>
+            <table align="center">
+                <thead>
+                    <tr>
+                        <th width="5%">#</th>
+                        <th width="35%">Cédula</th>
+                        <th width="45%">Fecha del proceso</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let worker of workers; let idx = index">
+                        <td align="center">{{idx + 1}}</td>
+                        <td align="center">{{worker.identification}}</td>
+                        <td align="center">{{worker.date | date : "medium" }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
