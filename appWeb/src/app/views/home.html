@@ -2,11 +2,11 @@
 >
     <div class="jumbotron">
         <h2>{{titulo}}</h2>
+        <div class="row">
+            <input type="text" id="identification" pattern="[0-9]*" maxlength="10" #identification="ngModel" name="identification" [(ngModel)]="worker.identification" required placeholder="Ingresar identificación del participante">
 
-        <input type="text" id="identification" pattern="[0-9]*" maxlength="10" #identification="ngModel" name="identification" [(ngModel)]="worker.identification" required placeholder="Ingresar identificación del participante">
-
-        <input type="file" id="file" #file="ngModel"  name="file" [(ngModel)]="worker.file" accept=".txt" class="form-control" required placeholder="Seleccioine un archivo"  (change)="fileChange($event)" [disabled]="!worker.identification">
-
+            <input type="file" id="file" #file="ngModel"  name="file" [(ngModel)]="worker.file" accept=".txt" class="form-control" required placeholder="Seleccioine un archivo"  (change)="fileChange($event)" [disabled]="!worker.identification">
+        </div>
         <div *ngIf="workers">
             <hr>
             <h2>Listado de participantes procesados</h2>

@@ -10,6 +10,20 @@ import org.springframework.context.annotation.Bean;
 import com.mudanza.configuration.StorageProperties;
 import com.mudanza.service.IStorageService;
 
+/**
+ * Punto de arranca de la aplicación.
+ * Tiene un bean llamado init el cual se encarga de borrar todo 
+ * los archivos.  
+ * Adicionalmente crea el directorio donde se guardarán los archivos
+ * si este no existe
+ * 
+ * 
+ * @author Paul Andrés Arenas Cardona
+ * @version 1.0 
+ * 
+ * Fecha de creación 2018-05-07
+ *
+ */
 @SpringBootApplication(scanBasePackages = {"com.mudanza"})
 @EnableConfigurationProperties(StorageProperties.class)
 @EnableAutoConfiguration

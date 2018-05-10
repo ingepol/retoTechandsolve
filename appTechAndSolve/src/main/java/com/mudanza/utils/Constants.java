@@ -1,5 +1,14 @@
 package com.mudanza.utils;
-
+/**
+* Clase de constantes, con los posibles mensajes de respuesta.
+* 
+* 
+* @author Paul Andrés Arenas Cardona
+* @version 1.0 
+* 
+* Fecha de creación 2018-05-07
+* 
+*/
 public class Constants {
 
 	private Constants() {

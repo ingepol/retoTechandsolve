@@ -10,24 +10,21 @@ import java.util.List;
 
 import com.mudanza.exception.StorageException;
 
+/**
+* Clase de utilidades, con métodos para:
+*  Leer el archivo de entrada y retornar una lista de enteros.
+*  Escribir los resultados y generar un archivo de salida. 
+* 
+* @author Paul Andrés Arenas Cardona
+* @version 1.0 
+* 
+* Fecha de creación 2018-05-07
+* 
+*/
 public class Utils {
 
 	private Utils() {
 		throw new IllegalStateException("Utility class");
-	}
-
-	public static List<Integer> descendingOrder(List<Integer> list) {
-		int temp;
-		for (int i = 0; i < list.size(); i++) {
-			for (int x = i + 1; x < list.size(); x++) {
-				if (list.get(x) > list.get(i)) {
-					temp = list.get(i);
-					list.set(i, list.get(x));
-					list.set(x, temp);
-				}
-			}
-		}
-		return list;
 	}
 
 	public static List<Integer> listOfIntegersToProcess(File file)  {

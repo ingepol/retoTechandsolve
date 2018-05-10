@@ -112,10 +112,18 @@ public class ProcessFileTest {
 	
 	@Test 
 	public void testValidateTwoTrips(){
-		List<Integer> lData = new ArrayList<>(Arrays.asList(4,30,30,1,1));
+		List<Integer> lData = new ArrayList<>(Arrays.asList(3,51,20,1));
 		List<Integer> lTrips = processFile.splitWeightsByDay(lData);
 		Assert.assertTrue(lTrips.get(0) == 2);
 	}
+	
+	@Test 
+	public void testValidateFourTrips(){
+		List<Integer> lData = new ArrayList<>(Arrays.asList(6,9,19,29,39,49,59));
+		List<Integer> lTrips = processFile.splitWeightsByDay(lData);
+		Assert.assertTrue(lTrips.get(0) == 4);
+	}
+	
 	
 	@Test 
 	public void testValidateEightTrips(){
@@ -124,10 +132,4 @@ public class ProcessFileTest {
 		Assert.assertTrue(lTrips.get(0) == 8);
 	}
 	
-	/*@Test
-	public void testGenerateResponse() {
-		File file = new File("upload-dir\\lazy_loading_example_input.txt");		
-		assertTrue(processFile.generateResponse(file));
-	}*/
-
 }
